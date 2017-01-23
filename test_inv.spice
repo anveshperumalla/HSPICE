@@ -1,0 +1,50 @@
+* test bench file: test_inv.spice
+* this file calls your circuit under test (cut)
+* note: the "+" at the beginning of the line implies continuation
+
+* here we define our dc sources
+vvddcut  VDDCUT  0 dc 2.5v
+vvsscut  VSSCUT  0 dc 0v
+vloads   INVLOADS 0 dc 2.5v
+vdrivers INVDRIVERS 0 dc 2.5v
+
+* here we define our three input test signals
+* these are the test vectors for the three input NAND
+* note: you may need more time, so you may have to expand the periods below
+* 0 
+* 1
+* 0 
+
+vsigip1 TEST_SIG1 0 pwl(
++ 0      0v   990ps  0v
++ 1010ps 2.5v 1990ps 2.5v
++ 2010ps 0v   2990ps 0v
++)
+
+
+* instantiate your subcircuit for testing
+xCUT Ain  Zout VDDCUT VSSCUT inv
+
+* instantiate realistic loads and drivers for the outputs
+* and inputs (respectively) of the circuit under test
+* note: positional pin connections for subcircuit call
+xL1 Zout LOAD_OUT_SIG1 INVLOADS 0 inv
+xL2 Zout LOAD_OUT_SIG2 INVLOADS 0 inv
+xD1 TEST_SIG1 Ain INVDRIVERS 0 inv
+
+
+* below are some possible output options
+* note: run time may need to be lengthened if more time is needed
+* note: transient increment may need to be adjusted to see transitions
+.tran 30ps 3000ps
+.plot tran v(Ain) v(Zout) i(vvddcut) i(vvsscut)
+.print tran v(Ain) v(Zout) i(vvddcut) i(vvsscut)
+.option post=3 probe
+
+* include subcircuit files and the FET model files
+.include ./eg_model_file.txt
+.include ./inv.spice
+
+.end
+
+

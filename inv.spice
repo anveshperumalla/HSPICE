@@ -1,0 +1,35 @@
+* Inverter logic
+* Created by Anvesh Perumalla
+* perumalla.3@wright.edu
+* Trust in Integrated Circuits - EE7550 Wright State University
+***************************************************************
+************ INVERTER circuit diagram with PUN and PDN *******
+
+*	      VDD!
+*	      |
+*	    --
+*      A- o| 
+*	    --
+*	      |------Z
+*	    --
+*      A - |
+*	    --
+*	      |
+*	     VSS! 
+*
+****************************************************************
+
+*************** Syntax ****************************************
+* .subckt <gatename> <inputs> <outputs> <Power> <Ground>
+* Mname Dnodename Gnodename Snodename Bulkname 
+* + modelname L=240.0E-9 W=480.0E-9
+
+.subckt inv A Z VDD! VSS!
+
+mp1 Z A VDD! VDD! pmosmodel L=240.0E-9 W=960.0E-9
+
+mn1 Z A VSS! VSS! nmosmodel L=240.0E-9 W=480.0E-9
+
+.ends inv 
+  
+ 
